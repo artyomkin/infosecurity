@@ -1,10 +1,13 @@
 package structures;
 
+import sun.security.util.ByteArrayLexOrder;
+
 public class Array {
     private int[] arr;
     private int len;
     private final int INITIAL_CAPACITY = 1;
     private final int INITIAL_LEN = 0;
+    private final int BLOCK_SIZE = 16;
 
     public Array(){
         this.arr = new int[INITIAL_CAPACITY];
@@ -21,6 +24,38 @@ public class Array {
         for (int i = 0; i < arr.length; i++){
             this.arr[i] = arr[i];
         }
+        this.len = arr.length;
+    }
+
+    public int[] getArr(){
+        int[] outArr = new int[this.len];
+        for (int i = 0; i < outArr.length; i++){
+            outArr[i] = this.arr[i];
+        }
+        return outArr;
+    }
+
+    public Array(byte arr[]){
+        this.arr = new int[arr.length];
+        for (int i = 0; i < arr.length; i++){
+            this.arr[i] = arr[i];
+        }
+        this.len = arr.length;
+    }
+    public void fromBytes(byte bytesarr[]){
+        this.arr = new int[bytesarr.length / Integer.BYTES];
+        for (int i = 0; i < bytesarr.length; i+=4){
+            int byte0 = bytesarr[i * 4] & 0xFF;
+            int byte1 = bytesarr[i * 4 + 1] & 0xFF << 8;
+            int byte2 = bytesarr[i * 4 + 2] & 0xFF << 16;
+            int byte3 = bytesarr[i * 4 + 3] & 0xFF << 24;
+            System.out.println("0 = " + String.format("%32s",Integer.toBinaryString(byte0)).replace(' ', '0'));
+            System.out.println("1 = " + String.format("%32s",Integer.toBinaryString(byte1)).replace(' ', '0'));
+            System.out.println("2 = " + String.format("%32s",Integer.toBinaryString(byte2)).replace(' ', '0'));
+            System.out.println("3 = " + String.format("%32s",Integer.toBinaryString(byte3)).replace(' ', '0'));
+            this.arr[i] = byte0 | byte1 | byte2 | byte3;
+        }
+
         this.len = arr.length;
     }
 
@@ -82,15 +117,37 @@ public class Array {
         }
     }
 
-    private byte[] toBytes(){
-        byte[] res = new byte[this.length()];
-        for (int i = 0; i < res.length; i++){
-            res[i] = (byte) this.get(i);
+    public void printRow(){
+        for (int i = 0; i < this.length() / BLOCK_SIZE * 4; i++){
+            for (int j = i * BLOCK_SIZE / 4; j < (i + 1) * BLOCK_SIZE / 4; j++){
+                System.out.print(Integer.toHexString(this.get(j)) + " ");
+            }
+            System.out.println();
         }
-        return res;
+        System.out.println();
     }
 
     public String toString(){
         return new String(this.toBytes());
+    }
+
+    public int[][] toMultiDimensionalArray(){
+        int res[][] = new int[4][4];
+        for (int i = 0; i < this.length()/4; i++){
+            for (int j = i*4; j < (i+1)*4; j++){
+                res[i][j%4] = this.get(j);
+            }
+        }
+        return res;
+    }
+
+    public byte[] toBytes(){
+        byte[] res = new byte[this.arr.length * Integer.BYTES];
+        for (int i = 0; i < this.arr.length; i++){
+            for (int j = 0; j < Integer.BYTES; j++){
+                res[i * Integer.BYTES + j] = (byte) (this.arr[i] >>> (j * 8));
+            }
+        }
+        return res;
     }
 }

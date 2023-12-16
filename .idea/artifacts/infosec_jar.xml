@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="infosec:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/infosec_jar</output-path>
+    <root id="archive" name="infosec.jar">
+      <element id="module-output" name="infosec" />
+    </root>
+  </artifact>
+</component>
