@@ -1,4 +1,4 @@
-Secret Storage Console Utility
+## Secret Storage Console Utility
 
 This is a command-line utility for managing secrets with the following features:
 
