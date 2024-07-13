@@ -23,8 +23,3 @@ This is a command-line utility for managing secrets with the following features:
 
 ## Contributions
 Contributions to this project are welcome. If you have any suggestions, feature requests, or bug reports, please feel free to open an issue or submit a pull request.
-
-## License
-This project is licensed under the MIT License. Feel free to use, modify, and distribute this software in accordance with the terms of the license.
-
-Thank you for using the Secret Storage Console Utility!
